@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
 
 
 class Category(models.Model):
@@ -31,7 +31,7 @@ class Post(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='post_owner')
 
     is_deleted = models.BooleanField(default=False)
-    date_created = models.DateField()
+    date_created = models.DateTimeField()
 
     # Return All the comments for the given Post
     @property
@@ -43,11 +43,11 @@ class Comment(models.Model):
     """
         Model For Comment
     """
-    comment = models.TextField()
+    text = models.TextField(verbose_name= 'Comment Text')
 
     # Which post comment belongs to
     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
-    dated = models.DateField()
+    dated = models.DateTimeField()
     is_deleted = models.BooleanField(default=False)
 
     # Which user has commented this
