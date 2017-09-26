@@ -22,6 +22,10 @@ class Post(models.Model):
     is_deleted = models.BooleanField(default=False)
     date_created = models.DateField()
 
+    @property
+    def get_comments(self):
+        return self.comments.all()
+
 
 class Comment(models.Model):
     comment = models.TextField()
