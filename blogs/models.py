@@ -10,7 +10,7 @@ class Category(models.Model):
 
     @property
     def get_posts(self):
-        return self.relative_posts.all()
+        return self.posts.all()
 
 
 class Post(models.Model):
@@ -19,12 +19,16 @@ class Post(models.Model):
 
     category = models.ForeignKey(Category, related_name='posts', on_delete=models.CASCADE)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='post_owner')
+    is_deleted = models.BooleanField(default=False)
     date_created = models.DateField()
 
 
 class Comment(models.Model):
     comment = models.TextField()
     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
+    dated = models.DateField()
+    is_deleted = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 class Like(models.Model):
