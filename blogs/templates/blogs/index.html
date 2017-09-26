@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load bootstrap3 %}
+<head>
+    <meta charset="UTF-8">
+    <title>Categories</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+
+<body>
+{% if Categories %}
+    <ul>
+        {% for Category in Categories %}
+            <li>Name: <b> {{ Category.name }}</b></li>
+        {% endfor %}
+    </ul>
+{% endif %}
+<form action="{% url 'blog:CategoryPost' %}" method="post" class="form-row">
+    {% csrf_token %}
+    {% bootstrap_form category %}
+    {% buttons %}
+        <button type="submit" class="btn btn-primary align-left">
+            {% bootstrap_icon "star" %} Give FeedBack
+        </button>
+    {% endbuttons %}
+</form>
+</body>
+</html>
