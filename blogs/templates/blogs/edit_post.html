@@ -3,7 +3,7 @@
 {% load bootstrap3 %}
 <head>
     <meta charset="UTF-8">
-    <title>Posts</title>
+    <title>Post View</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -12,21 +12,18 @@
 
 <body>
 
-{% for post in Category.get_posts %}
-    <p>{{ post.title }}</p>
-    <p>{{ post.description }}</p>
-    <p>{{ post.created_by.username }}</p>
-    <p>{{ post.date_created }}</p>
-{% endfor %}
-
-<form action="{% url 'blog:CreatePost' Category.id %}" method="post" class="form-row">
+ <div class="container">
+  <h2>Update Post </h2>
+<form action="{% url 'blog:UpdatePost' category_id post_id %}" method="POST" class="form-control-static">
     {% csrf_token %}
-    {% bootstrap_form post_form %}
+    {% bootstrap_form postform %}
     {% buttons %}
         <button type="submit" class="btn btn-primary align-left">
-            {% bootstrap_icon "plus" %} Add Post
+            {% bootstrap_icon "pencil" %} Update
         </button>
     {% endbuttons %}
 </form>
+  </div>
+
 </body>
 </html>

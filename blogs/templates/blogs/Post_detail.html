@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load bootstrap3 %}
+<head>
+    <meta charset="UTF-8">
+    <title>Post View</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+{% load header_tag %}
+{% logged_in_user user%}
+
+<body>
+<div class="container">
+  <div class="jumbotron">
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.description }}</p>
+      <p>Created by:<b> {{ post.created_by.username }}</b></p>
+      <p>Date Posted:<b> {{ post.date_created }}</b></p>
+  </div>
+
+</div>
+    <div class="container">
+  <h2>Comments</h2>
+{% for comment in post.get_comments %}
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <b></b><p>{{ comment.text }}</p>
+            <b>Created by: </b><p>{{ comment.user.username }}</p>
+            <b>Date Posted</b><p>{{ comment.dated }}</p>
+            <form action="{% url 'blog:DeleteComment' post.category.id post.id comment.id%}" method="Post" style="display:inline-table">
+                {% csrf_token %}
+                {% buttons %}
+                    <button type="submit", class="align-right float-right pull-right">
+                        {% bootstrap_icon "remove" %} Delete
+                    </button>
+                {% endbuttons %}
+            </form>
+            <form action="{% url 'blog:UpdatePostView' post.category.id post.id comment.id%}" method="Post" style="display:inline-table">
+                {% csrf_token %}
+                {% buttons %}
+                    <button type="submit", class="align-right float-right pull-right">
+                        {% bootstrap_icon "remove" %} update
+                    </button>
+                {% endbuttons %}
+            </form>
+        </div>
+    </div>
+
+{% endfor %}
+
+    </div>
+
+ <div class="container">
+  <h2>Add Comment </h2>
+<form action="{% url 'blog:CreateComment' post.category.id post.id %}" method="post" class="form-control-static">
+    {% csrf_token %}
+    {% bootstrap_form comment_form %}
+    {% buttons %}
+        <button type="submit" class="btn btn-primary align-left">
+            {% bootstrap_icon "plus" %} Add Comment
+        </button>
+    {% endbuttons %}
+</form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<div class="container">
+  <div class="page-header">
+    <div><b>{{ user.username|capfirst }}</b>
+    <a href="{% url 'blog:logout' %}" class="btn btn-info pull-right" role="button">logout</a>
+    </div>
+
+
+  </div>
+</div>
+</body>
+</html>

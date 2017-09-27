@@ -14,7 +14,7 @@ class Category(models.Model):
     # Return all the related posts of the given category
     @property
     def get_posts(self):
-        return self.posts.all()
+        return self.posts.all().order_by('-date_created')
 
 
 class Post(models.Model):
@@ -36,7 +36,7 @@ class Post(models.Model):
     # Return All the comments for the given Post
     @property
     def get_comments(self):
-        return self.comments.all()
+        return self.comments.all().order_by('-dated')
 
 
 class Comment(models.Model):
