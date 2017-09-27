@@ -15,7 +15,20 @@
 {% if Categories %}
     <ul>
         {% for Category in Categories %}
-            <li>Name: <b> {{ Category.name }}</b></li>
+
+            <li> <a href="{% url 'blog:PostIndex' Category.id %}">Name: <b> {{ Category.name }}</b>
+            </a>
+
+            <form action="{% url 'blog:DeleteCategory' Category.id%}" method="Post" style="display:inline-table">
+                {% csrf_token %}
+            {% buttons %}
+        <button type="submit">
+            {% bootstrap_icon "remove" %} Delete
+        </button>
+    {% endbuttons %}
+            </form>
+            </li>
+
         {% endfor %}
     </ul>
 {% endif %}
@@ -24,7 +37,7 @@
     {% bootstrap_form category %}
     {% buttons %}
         <button type="submit" class="btn btn-primary align-left">
-            {% bootstrap_icon "star" %} Give FeedBack
+            {% bootstrap_icon "plus" %} Add Category
         </button>
     {% endbuttons %}
 </form>
