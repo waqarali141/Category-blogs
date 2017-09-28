@@ -36,26 +36,23 @@ urlpatterns = [
     url(r'category/(?P<Cid>[0-9 a-z A-Z]+)/post/(?P<pk>[0-9 a-z A-Z]+)/add/comment$', views.CreateCommentView.as_view(),
         name='CreateComment'),
 
-    url(r'category/(?P<Cid>[0-9 a-z A-Z]+)/post/(?P<Pid>[0-9 a-z A-Z]+)/delete/comment/(?P<pk>[0-9 a-z A-Z]+)$', views.DeleteCommentView.as_view(),
-    name='DeleteComment'),
+    url(r'category/(?P<Cid>[0-9 a-z A-Z]+)/post/(?P<Pid>[0-9 a-z A-Z]+)/delete/comment/(?P<pk>[0-9 a-z A-Z]+)$',
+        views.DeleteCommentView.as_view(),
+        name='DeleteComment'),
 
     url(r'category/(?P<Cid>[0-9 a-z A-Z]+)/post/(?P<pk>[0-9 a-z A-Z]+)/update$', views.PostUpdateView.as_view(),
         name='UpdatePostView'),
 
-    url(r'category/(?P<Cid>[0-9 a-z A-Z]+)/post/(?P<pk>[0-9 a-z A-Z]+)/update/save$', views.PostUpdate.as_view(),
-        name='UpdatePost'),
-
-    url(r'category/(?P<Cid>[0-9 a-z A-Z]+)/post/(?P<Pid>[0-9 a-z A-Z]+)/update/comment/(?P<pk>[0-9 a-z A-Z]+)$', views.CommentUpdateView.as_view(),
+    url(r'category/(?P<Cid>[0-9 a-z A-Z]+)/post/(?P<Pid>[0-9 a-z A-Z]+)/update/comment/(?P<pk>[0-9 a-z A-Z]+)$',
+        views.CommentUpdateView.as_view(),
         name='CommentUpdateView'),
 
-    url(r'category/(?P<Cid>[0-9 a-z A-Z]+)/post/(?P<Pid>[0-9 a-z A-Z]+)/update/comment/(?P<pk>[0-9 a-z A-Z]+)/save$', views.CommentUpdate.as_view(),
-        name='CommentUpdate'),
-
-    url(r'category/(?P<CatId>[0-9 a-z A-Z]+)/post/(?P<Pid>[0-9 a-z A-Z]+)/like/comment/(?P<CommentId>[0-9 a-z A-Z]+)', views.commentlikeview,
+    url(r'category/(?P<CatId>[0-9 a-z A-Z]+)/post/(?P<Pid>[0-9 a-z A-Z]+)/like/comment/(?P<CommentId>[0-9 a-z A-Z]+)',
+        views.commentlikeview,
         name='CommentLike'),
 
-    url(r'category/(?P<CatId>[0-9 a-z A-Z]+)/post/(?P<Pid>[0-9 a-z A-Z]+)/unlike/comment/(?P<CommentId>[0-9 a-z A-Z]+)', views.commentunlikeview,
-        name= 'CommentUnLike'),
-
+    url(r'category/(?P<CatId>[0-9 a-z A-Z]+)/post/(?P<Pid>[0-9 a-z A-Z]+)/unlike/comment/(?P<CommentId>[0-9 a-z A-Z]+)',
+        views.commentunlikeview,
+        name='CommentUnLike'),
 
 ]

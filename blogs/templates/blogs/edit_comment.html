@@ -12,18 +12,20 @@
 
 <body>
 
- <div class="container">
-  <h2>Update Comment </h2>
-<form action="{% url 'blog:CommentUpdate' category_id post_id comment_id%}" method="POST" class="form-control-static">
-    {% csrf_token %}
-    {% bootstrap_form commentform %}
-    {% buttons %}
-        <button type="submit" class="btn btn-primary align-left">
-            {% bootstrap_icon "pencil" %} Update
-        </button>
-    {% endbuttons %}
-</form>
-  </div>
+<div class="container">
+    <h2>Update Comment </h2>
+
+    <form action="{% url 'blog:CommentUpdateView' category_id post_id comment_id %}" method="POST"
+          class="form-control-static">
+        {% csrf_token %}
+        {% bootstrap_form commentform %}
+        {% buttons %}
+            <button type="submit" class="btn btn-primary align-left">
+                {% bootstrap_icon "pencil" %} Update
+            </button>
+        {% endbuttons %}
+    </form>
+</div>
 
 </body>
 </html>

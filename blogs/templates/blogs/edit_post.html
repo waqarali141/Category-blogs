@@ -14,7 +14,7 @@
 
  <div class="container">
   <h2>Update Post </h2>
-<form action="{% url 'blog:UpdatePost' category_id post_id %}" method="POST" class="form-control-static">
+<form action="{% url 'blog:UpdatePostView' category_id post_id %}" method="POST" class="form-control-static">
     {% csrf_token %}
     {% bootstrap_form postform %}
     {% buttons %}

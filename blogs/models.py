@@ -53,6 +53,7 @@ class Comment(models.Model):
     # Which user has commented this
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    # Get all the user who liked this comment
     @property
     def get_users(self):
         return [like.user for like in self.likes.all()]

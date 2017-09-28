@@ -73,16 +73,11 @@ class PostDetailView(LoginRequiredMixin, CommentFormContext, DetailView):
     context_object_name = 'post'
 
 
-class PostUpdateView(LoginRequiredMixin, DetailView):
+class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
+    form_class = PostForm
     template_name = 'blogs/edit_post.html'
     context_object_name = 'postform'
-
-    def get(self, request, *args, **kwargs):
-        if self.request.user == Post.objects.get(pk=self.kwargs['pk']).created_by:
-            return super(PostUpdateView, self).get(request, *args, **kwargs)
-        else:
-            return HttpResponse('Unauthorised', status=401)
 
     def get_context_data(self, **kwargs):
         post = Post.objects.get(pk=self.kwargs['pk'])
@@ -91,17 +86,12 @@ class PostUpdateView(LoginRequiredMixin, DetailView):
                 'category_id': self.kwargs['Cid'],
                 'post_id': self.kwargs['pk']}
 
-
-class PostUpdate(LoginRequiredMixin, UpdateView):
-    model = Post
-    fields = ['title', 'description']
-
     def form_valid(self, form):
         if self.request.user == Post.objects.get(pk=self.kwargs['pk']).created_by:
             form = PostForm(self.request.POST, instance=Post.objects.get(pk=self.kwargs['pk']))
             self.object = form.save()
             self.success_url = reverse('blog:PostIndex', args=(self.kwargs['Cid'],))
-            return super(PostUpdate, self).form_valid(form)
+            return super(PostUpdateView, self).form_valid(form)
         else:
             return HttpResponse('Unauthorised', status=401)
 
@@ -125,16 +115,11 @@ class DeleteCommentView(LoginRequiredMixin, DeleteView):
         return reverse('blog:PostDetail', args=(self.kwargs['Cid'], self.kwargs['Pid'],))
 
 
-class CommentUpdateView(LoginRequiredMixin, DetailView):
+class CommentUpdateView(LoginRequiredMixin, UpdateView):
     model = Comment
     template_name = 'blogs/edit_comment.html'
     context_object_name = 'commentform'
-
-    def get(self, request, *args, **kwargs):
-        if self.request.user == Comment.objects.get(pk=self.kwargs['pk']).user:
-            return super(CommentUpdateView, self).get(request, *args, **kwargs)
-        else:
-            return HttpResponse('Unauthorised', status=401)
+    form_class = CommentForm
 
     def get_context_data(self, **kwargs):
         comment = Comment.objects.get(pk=self.kwargs['pk'])
@@ -145,17 +130,15 @@ class CommentUpdateView(LoginRequiredMixin, DetailView):
                 'comment_id': self.kwargs['pk']
                 }
 
-
-class CommentUpdate(LoginRequiredMixin, UpdateView):
-    model = Comment
-    fields = ['text', ]
+    def get_success_url(self):
+        return reverse('blog:PostDetail', args=(self.kwargs['Cid'], self.kwargs['Pid']))
 
     def form_valid(self, form):
         if self.request.user == Comment.objects.get(pk=self.kwargs['pk']).user:
             form = CommentForm(self.request.POST, instance=Comment.objects.get(pk=self.kwargs['pk']))
             self.object = form.save()
             self.success_url = reverse('blog:PostDetail', args=(self.kwargs['Cid'], self.kwargs['Pid']))
-            return super(CommentUpdate, self).form_valid(form)
+            return super(CommentUpdateView, self).form_valid(form)
         else:
             return HttpResponse('Unauthorised', status=401)
 

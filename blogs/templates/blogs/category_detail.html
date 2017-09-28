@@ -39,7 +39,7 @@
                     </button>
                 {% endbuttons %}
             </form>
-            <form action="{% url 'blog:UpdatePostView' Category.id post.id %}" method="get" style="display:inline-table">
+            <form action="{% url 'blog:UpdatePostView' Category.id post.id %}" method="POST" style="display:inline-table">
                 {% csrf_token %}
                 {% buttons %}
                     <button type="submit", class="align-right float-right pull-right">
