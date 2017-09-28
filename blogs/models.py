@@ -43,7 +43,7 @@ class Comment(models.Model):
     """
         Model For Comment
     """
-    text = models.TextField(verbose_name= 'Comment Text')
+    text = models.TextField(verbose_name='Comment Text')
 
     # Which post comment belongs to
     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
@@ -52,6 +52,10 @@ class Comment(models.Model):
 
     # Which user has commented this
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    @property
+    def get_users(self):
+        return [like.user for like in self.likes.all()]
 
 
 class Like(models.Model):
@@ -62,4 +66,4 @@ class Like(models.Model):
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='likes')
 
     # user who liked the comment
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -29,8 +29,10 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <b></b><p>{{ comment.text }}</p>
-            <b>Created by: </b><p>{{ comment.user.username }}</p>
+            <b>Comment by: </b><p>{{ comment.user.username }}</p>
             <b>Date Posted</b><p>{{ comment.dated }}</p>
+            <b>Likes: </b>{{ comment.likes.count }}<p>
+        {% if user == comment.user%}
             <form action="{% url 'blog:DeleteComment' post.category.id post.id comment.id%}" method="Post" style="display:inline-table">
                 {% csrf_token %}
                 {% buttons %}
@@ -39,14 +41,35 @@
                     </button>
                 {% endbuttons %}
             </form>
-            <form action="{% url 'blog:UpdatePostView' post.category.id post.id%}" method="Post" style="display:inline-table">
+            <form action="{% url 'blog:CommentUpdateView' post.category.id post.id comment.id%}" method="get" style="display:inline-table">
                 {% csrf_token %}
                 {% buttons %}
                     <button type="submit", class="align-right float-right pull-right">
-                        {% bootstrap_icon "remove" %} update
+                        {% bootstrap_icon "pencil" %} update
                     </button>
                 {% endbuttons %}
             </form>
+        {% endif %}
+            {% if user in comment.get_users %}
+            <form action="{% url 'blog:CommentUnLike' post.category.id post.id comment.id%}" method="get" style="display:inline-table">
+                {% csrf_token %}
+                {% buttons %}
+                    <button type="submit", class="align-right float-right pull-right">
+                        {% bootstrap_icon "minus" %} Unlike
+                    </button>
+                {% endbuttons %}
+                </form>
+            {% else %}
+
+            <form action="{% url 'blog:CommentLike' post.category.id post.id comment.id%}" method="get" style="display:inline-table">
+                {% csrf_token %}
+                {% buttons %}
+                    <button type="submit", class="align-right float-right pull-right">
+                        {% bootstrap_icon "plus" %} like
+                    </button>
+                {% endbuttons %}
+            </form>
+            {% endif %}
         </div>
     </div>
 

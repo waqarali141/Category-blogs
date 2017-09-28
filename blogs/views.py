@@ -2,14 +2,14 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, UpdateView
 from django.views.generic.edit import CreateView, DeleteView
 
-from forms import CategoryFormContext, PostFormContext, CommentFormContext, PostForm
-from models import Category, Post, Comment
+from forms import CategoryFormContext, PostFormContext, CommentFormContext, PostForm, CommentForm
+from models import Category, Post, Comment, Like
 
 
 class CategoryIndexView(LoginRequiredMixin, CategoryFormContext, ListView):
@@ -123,3 +123,56 @@ class DeleteCommentView(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse('blog:PostDetail', args=(self.kwargs['Cid'], self.kwargs['Pid'],))
+
+
+class CommentUpdateView(LoginRequiredMixin, DetailView):
+    model = Comment
+    template_name = 'blogs/edit_comment.html'
+    context_object_name = 'commentform'
+
+    def get(self, request, *args, **kwargs):
+        if self.request.user == Comment.objects.get(pk=self.kwargs['pk']).user:
+            return super(CommentUpdateView, self).get(request, *args, **kwargs)
+        else:
+            return HttpResponse('Unauthorised', status=401)
+
+    def get_context_data(self, **kwargs):
+        comment = Comment.objects.get(pk=self.kwargs['pk'])
+        comment = CommentForm(instance=comment)
+        return {self.context_object_name: comment,
+                'category_id': self.kwargs['Cid'],
+                'post_id': self.kwargs['Pid'],
+                'comment_id': self.kwargs['pk']
+                }
+
+
+class CommentUpdate(LoginRequiredMixin, UpdateView):
+    model = Comment
+    fields = ['text', ]
+
+    def form_valid(self, form):
+        if self.request.user == Comment.objects.get(pk=self.kwargs['pk']).user:
+            form = CommentForm(self.request.POST, instance=Comment.objects.get(pk=self.kwargs['pk']))
+            self.object = form.save()
+            self.success_url = reverse('blog:PostDetail', args=(self.kwargs['Cid'], self.kwargs['Pid']))
+            return super(CommentUpdate, self).form_valid(form)
+        else:
+            return HttpResponse('Unauthorised', status=401)
+
+
+def commentlikeview(request, CatId, Pid, CommentId):
+    comment = Comment.objects.get(pk=CommentId)
+    user = request.user
+    like = Like()
+    like.comment = comment
+    like.user = user
+    like.save()
+    return HttpResponseRedirect(reverse('blog:PostDetail', args=(CatId, Pid,)))
+
+
+def commentunlikeview(request, CatId, Pid, CommentId):
+    comment = Comment.objects.get(pk=CommentId)
+    user = request.user
+    like = Like.objects.get(comment=comment, user=user)
+    like.delete()
+    return HttpResponseRedirect(reverse('blog:PostDetail', args=(CatId, Pid)))

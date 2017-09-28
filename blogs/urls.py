@@ -43,6 +43,19 @@ urlpatterns = [
         name='UpdatePostView'),
 
     url(r'category/(?P<Cid>[0-9 a-z A-Z]+)/post/(?P<pk>[0-9 a-z A-Z]+)/update/save$', views.PostUpdate.as_view(),
-        name='UpdatePost')
+        name='UpdatePost'),
+
+    url(r'category/(?P<Cid>[0-9 a-z A-Z]+)/post/(?P<Pid>[0-9 a-z A-Z]+)/update/comment/(?P<pk>[0-9 a-z A-Z]+)$', views.CommentUpdateView.as_view(),
+        name='CommentUpdateView'),
+
+    url(r'category/(?P<Cid>[0-9 a-z A-Z]+)/post/(?P<Pid>[0-9 a-z A-Z]+)/update/comment/(?P<pk>[0-9 a-z A-Z]+)/save$', views.CommentUpdate.as_view(),
+        name='CommentUpdate'),
+
+    url(r'category/(?P<CatId>[0-9 a-z A-Z]+)/post/(?P<Pid>[0-9 a-z A-Z]+)/like/comment/(?P<CommentId>[0-9 a-z A-Z]+)', views.commentlikeview,
+        name='CommentLike'),
+
+    url(r'category/(?P<CatId>[0-9 a-z A-Z]+)/post/(?P<Pid>[0-9 a-z A-Z]+)/unlike/comment/(?P<CommentId>[0-9 a-z A-Z]+)', views.commentunlikeview,
+        name= 'CommentUnLike'),
+
 
 ]

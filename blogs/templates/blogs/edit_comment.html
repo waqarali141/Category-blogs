@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load bootstrap3 %}
+<head>
+    <meta charset="UTF-8">
+    <title>Post View</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+ <div class="container">
+  <h2>Update Comment </h2>
+<form action="{% url 'blog:CommentUpdate' category_id post_id comment_id%}" method="POST" class="form-control-static">
+    {% csrf_token %}
+    {% bootstrap_form commentform %}
+    {% buttons %}
+        <button type="submit" class="btn btn-primary align-left">
+            {% bootstrap_icon "pencil" %} Update
+        </button>
+    {% endbuttons %}
+</form>
+  </div>
+
+</body>
+</html>
