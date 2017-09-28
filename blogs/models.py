@@ -16,6 +16,9 @@ class Category(models.Model):
     def get_posts(self):
         return self.posts.all().order_by('-date_created')
 
+    def __str__(self):
+        return self.name
+
 
 class Post(models.Model):
     """
@@ -38,6 +41,8 @@ class Post(models.Model):
     def get_comments(self):
         return self.comments.all().order_by('-dated')
 
+    def __str__(self):
+        return self.title
 
 class Comment(models.Model):
     """
