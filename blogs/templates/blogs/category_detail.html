@@ -30,6 +30,7 @@
             <b>Created by: </b><p>{{ post.created_by.username }}</p>
             <b>Date Posted</b><p>{{ post.date_created }}</p>
         </a>
+        {% if user == post.created_by %}
             <form action="{% url 'blog:DeletePost' Category.id post.id %}" method="Post" style="display:inline-table">
                 {% csrf_token %}
                 {% buttons %}
@@ -42,10 +43,11 @@
                 {% csrf_token %}
                 {% buttons %}
                     <button type="submit", class="align-right float-right pull-right">
-                        {% bootstrap_icon "update" %} Update
+                        {% bootstrap_icon "pencil" %} Update
                     </button>
                 {% endbuttons %}
             </form>
+        {% endif %}
         </div>
     </div>
 

@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse
 from django.urls import reverse
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, UpdateView
@@ -54,10 +55,16 @@ class CreatePostView(LoginRequiredMixin, CreateView):
 
 class DeletePostView(LoginRequiredMixin, DeleteView):
     model = Post
-    # success_url = reverse('blog:PostIndex', args=(self.kwargs['pk'],))
 
     def get_success_url(self):
         return reverse('blog:PostIndex', args=(self.kwargs['Cid'],))
+
+    def delete(self, request, *args, **kwargs):
+        post_object = Post.objects.get(pk=kwargs['pk'])
+        if request.user == post_object.created_by:
+            return super(DeletePostView, self).delete(request, *args, **kwargs)
+        else:
+            return HttpResponse('Unauthorised', status=401)
 
 
 class PostDetailView(LoginRequiredMixin, CommentFormContext, DetailView):
@@ -70,6 +77,12 @@ class PostUpdateView(LoginRequiredMixin, DetailView):
     model = Post
     template_name = 'blogs/edit_post.html'
     context_object_name = 'postform'
+
+    def get(self, request, *args, **kwargs):
+        if self.request.user == Post.objects.get(pk=self.kwargs['pk']).created_by:
+            return super(PostUpdateView, self).get(request, *args, **kwargs)
+        else:
+            return HttpResponse('Unauthorised', status=401)
 
     def get_context_data(self, **kwargs):
         post = Post.objects.get(pk=self.kwargs['pk'])
@@ -84,10 +97,13 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
     fields = ['title', 'description']
 
     def form_valid(self, form):
-        form = PostForm(self.request.POST, instance=Post.objects.get(pk=self.kwargs['pk']))
-        self.object = form.save()
-        self.success_url = reverse('blog:PostIndex', args=(self.kwargs['Cid'],))
-        return super(PostUpdate, self).form_valid(form)
+        if self.request.user == Post.objects.get(pk=self.kwargs['pk']).created_by:
+            form = PostForm(self.request.POST, instance=Post.objects.get(pk=self.kwargs['pk']))
+            self.object = form.save()
+            self.success_url = reverse('blog:PostIndex', args=(self.kwargs['Cid'],))
+            return super(PostUpdate, self).form_valid(form)
+        else:
+            return HttpResponse('Unauthorised', status=401)
 
 
 class CreateCommentView(LoginRequiredMixin, CreateView):
