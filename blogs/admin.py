@@ -10,13 +10,24 @@ admin.site.register(Like)
 
 
 class AdminCategoryModel(admin.ModelAdmin):
-    fields = ('name', )
+    fields = ('name',)
     list_display = ('name',)
     list_filter = ('name',)
 
 
-class AdminPostModer(admin.ModelAdmin):
-    list_display = ('title', 'category.name', 'created_by')
+class AdminPostModel(admin.ModelAdmin):
+    list_display = ('title', 'category_name', 'username')
+    list_filter = ['category__name', 'created_by']
+
+    def category_name(self, obj):
+        return obj.category.name
+
+    def username(self, obj):
+        return obj.created_by.username
+
+    category_name.short_description = "Category"
+    username.short_description = 'Posted By'
+
 
 admin.site.register(Category, AdminCategoryModel)
-admin.site.register(Post, AdminPostModer)
+admin.site.register(Post, AdminPostModel)
