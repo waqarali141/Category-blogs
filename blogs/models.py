@@ -31,7 +31,7 @@ class Post(models.Model):
     category = models.ForeignKey(Category, related_name='posts', on_delete=models.CASCADE)
 
     # The User who created the Post
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='post_owner')
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='post_owner', verbose_name='Creator')
 
     is_deleted = models.BooleanField(default=False)
     date_created = models.DateTimeField()
@@ -43,6 +43,7 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
 
 class Comment(models.Model):
     """
